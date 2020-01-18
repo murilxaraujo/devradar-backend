@@ -1,9 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const app = express();
 const routes = require("./routes");
 const cors = require("cors");
+const http = require("http");
 const port = process.env.PORT || 3000;
+const { setupWebSocket } = require("./utils/websocket");
+
+const app = express();
+const server = http.Server(app);
+
+setupWebSocket(server);
+
 mongoose.connect(
   "mongodb+srv://omnistack:omnistack2019@omnistack-tx9vf.mongodb.net/week10?retryWrites=true&w=majority",
   {
@@ -14,5 +21,4 @@ mongoose.connect(
 app.use(cors());
 app.use(express.json());
 app.use(routes);
-
-app.listen(port);
+server.listen(port);
